@@ -14,10 +14,6 @@ echo "
 --> $name
 "
 
-
-
-
-
 ######################################### config_lara_app_prefix | start
 read -p "
 app prefix: 
@@ -56,10 +52,6 @@ echo "
 --> $config_lara_frontend_prefix
 "
 ######################################### config_lara_frontend_prefix | end
-
-
-
-
 
 
 
@@ -110,12 +102,16 @@ Mysqldaten (DB):
 echo "
 --> $config_mysql_db_name
 "
+config_mysql_db_name_test=${config_mysql_db_name}_test
+echo " (testdb name)
+--> $config_mysql_db_name_test
+"
 ######################################### config_mysql_dn_name | end
 
 
 ######################################### config_lara_multitree | start
 read -p "
-Multipagetree?: 
+multi page tree? (bsp.: /de/seiten || /en/sites): 
 " config_lara_multitree
 echo "
 --> $config_lara_multitree
@@ -311,6 +307,46 @@ MIX_PUSHER_APP_KEY="${PUSHER_APP_KEY}"
 MIX_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"  
 " > $folder/.env && 
 
+
+## create/overwrite default phpunit.xml
+
+echo '
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+>
+    <testsuites>
+        <testsuite name="Unit">
+            <directory suffix="Test.php">./tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Feature">
+            <directory suffix="Test.php">./tests/Feature</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./app</directory>
+        </whitelist>
+    </filter>
+    <php>
+        <env name="TESTING" value="true"/>
+        <server name="APP_ENV" value="testing"/>
+        <server name="BCRYPT_ROUNDS" value="4"/>
+        <server name="CACHE_DRIVER" value="array"/>
+        <server name="DB_CONNECTION" value="'$config_mysql_db_name_test'"/>
+        <server name="DB_DATABASE" value="test"/>
+        <server name="MAIL_MAILER" value="array"/>
+        <server name="QUEUE_CONNECTION" value="sync"/>
+        <server name="SESSION_DRIVER" value="array"/>
+        <server name="TELESCOPE_ENABLED" value="false"/>
+    </php>
+</phpunit>
+
+' > $folder/phpunit.xml && 
+
+
 #change dir to folder
 cd $folder &&
 
@@ -321,12 +357,18 @@ composer require git-haml-eu/lara:dev-master &&
 #remove default usertablecreate migration from laravel
 rm $folder/database/migrations/2014_10_12_000000_create_users_table.php && 
 
-#replace phpunit
-cp $folder/vendor/git-haml-eu/lara/src/phpunit.xml.example $folder/phpunit.xml && 
 
-nano $folder/phpunit.xml 
-
+##install lara
 php artisan lara:install installfull
+
+##publish vendor (backend files)
+php artisan vendor:publish --tag engine.public.css
+php artisan vendor:publish --tag engine.public.frontend
+php artisan vendor:publish --tag engine.public.img
+php artisan vendor:publish --tag engine.public.js
+php artisan vendor:publish --tag engine.public.plugins
+php artisan vendor:publish --tag engine.public.vendor
+
 
 #output
 echo '
