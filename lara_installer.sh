@@ -351,7 +351,7 @@ echo '
 cd $folder &&
 
 #run engine
-composer config repositories.git-haml-eu vcs https://github.com/git-haml-eu/lara.git && 
+composer config repositories.git-haml-eu vcs https://github.com/github-haml-eu/lara.git && 
 composer require git-haml-eu/lara:dev-master && 
 
 #remove default usertablecreate migration from laravel
