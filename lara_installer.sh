@@ -350,6 +350,10 @@ echo '
 #change dir to folder
 cd $folder &&
 
+#you need one valid github token
+echo 'how to get a valid github token: 
+https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token';
+
 #run engine
 composer config repositories.git-haml-eu vcs https://github.com/github-haml-eu/lara.git && 
 composer require git-haml-eu/lara:dev-master && 
