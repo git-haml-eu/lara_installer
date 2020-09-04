@@ -355,8 +355,8 @@ echo 'how to get a valid github token:
 https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token';
 
 #run engine
-composer config repositories.git-haml-eu vcs https://github.com/github-haml-eu/lara.git && 
-composer require git-haml-eu/lara:dev-master && 
+composer config repositories.github-haml-eu vcs https://github.com/github-haml-eu/lara.git && 
+composer require github-haml-eu/lara:dev-master && 
 
 #remove default usertablecreate migration from laravel
 rm $folder/database/migrations/2014_10_12_000000_create_users_table.php && 
@@ -373,6 +373,8 @@ php artisan vendor:publish --tag engine.public.js
 php artisan vendor:publish --tag engine.public.plugins
 php artisan vendor:publish --tag engine.public.vendor
 
+//overwrite app
+php artisan vendor:publish --tag engine.app.config  --force
 
 #output
 echo '
