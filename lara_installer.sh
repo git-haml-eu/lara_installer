@@ -310,14 +310,16 @@ MIX_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"
 
 ## create/overwrite default phpunit.xml
 
-echo '
-<?xml version="1.0" encoding="UTF-8"?>
+echo '<?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="vendor/autoload.php"
          colors="true"
 >
     <testsuites>
+        <testsuite name="Engine">
+            <directory suffix="EngineTest.php">./vendor/github-haml-eu/lara/src/tests/FeatureEngine</directory>
+        </testsuite>
         <testsuite name="Unit">
             <directory suffix="Test.php">./tests/Unit</directory>
         </testsuite>
@@ -375,6 +377,11 @@ php artisan vendor:publish --tag engine.public.vendor
 
 //overwrite app
 php artisan vendor:publish --tag engine.app.config  --force
+php artisan vendor:publish --tag engine.database.config  --force
+php artisan vendor:publish --tag engine.engine.config  --force
+
+//add git ignore logi for backup folders etc..
+sed -i '/storage/backup/*' rm $folder/.gitignore
 
 #output
 echo '
