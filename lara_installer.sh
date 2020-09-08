@@ -337,7 +337,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>
         <server name="APP_ENV" value="testing"/>
         <server name="BCRYPT_ROUNDS" value="4"/>
         <server name="CACHE_DRIVER" value="array"/>
-        <server name="DB_CONNECTION" value="'$config_mysql_db_name_test'"/>
+        <server name="DB_CONNECTION" value="test"/>
         <server name="DB_DATABASE" value="test"/>
         <server name="MAIL_MAILER" value="array"/>
         <server name="QUEUE_CONNECTION" value="sync"/>
@@ -381,7 +381,8 @@ php artisan vendor:publish --tag engine.database.config  --force
 php artisan vendor:publish --tag engine.engine.config  --force
 
 //add git ignore logi for backup folders etc..
-sed -i '/storage/backup/*' rm $folder/.gitignore
+echo '/storage/backup/*' >> $folder/.gitignore
+echo '/storage/lara/*' >> $folder/.gitignore
 
 #output
 echo '
