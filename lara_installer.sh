@@ -1,5 +1,5 @@
 #!/bin/bash
-# 
+#
 
 #######################################
 #
@@ -16,7 +16,7 @@ echo "
 
 ######################################### config_lara_app_prefix | start
 read -p "
-app prefix: 
+app prefix:
 " config_lara_app_prefix
 echo "
 --> $config_lara_app_prefix
@@ -26,7 +26,7 @@ echo "
 
 ######################################### config_lara_admin_prefix | start
 read -p "
-admin prefix: 
+admin prefix:
 " config_lara_admin_prefix
 echo "
 --> $config_lara_admin_prefix
@@ -36,7 +36,7 @@ echo "
 
 ######################################### config_lara_api_prefix | start
 read -p "
-api prefix: 
+api prefix:
 " config_lara_api_prefix
 echo "
 --> $config_lara_api_prefix
@@ -46,7 +46,7 @@ echo "
 
 ######################################### config_lara_frontend_prefix | start
 read -p "
-frontend prefix: 
+frontend prefix:
 " config_lara_frontend_prefix
 echo "
 --> $config_lara_frontend_prefix
@@ -58,7 +58,7 @@ echo "
 
 ######################################### url | start
 read -p "
-Wie lautet die Url: 
+Wie lautet die Url:
 (bsp.: https://engine.haml)
 " config_url
 echo "
@@ -68,7 +68,7 @@ echo "
 
 ######################################### config_mysql_host | start
 read -p "
-Mysqldaten (Host): 
+Mysqldaten (Host):
 " config_mysql_host
 echo "
 --> $config_mysql_host
@@ -77,7 +77,7 @@ echo "
 
 ######################################### config_mysql_user | start
 read -p "
-Mysqldaten (User): 
+Mysqldaten (User):
 " config_mysql_user
 echo "
 --> $config_mysql_user
@@ -87,7 +87,7 @@ echo "
 
 ######################################### config_mysql_password | start
 read -p "
-Mysqldaten (Password): 
+Mysqldaten (Password):
 " config_mysql_password
 echo "
 --> $config_mysql_password
@@ -97,7 +97,7 @@ echo "
 
 ######################################### config_mysql_dn_name | start
 read -p "
-Mysqldaten (DB): 
+Mysqldaten (DB):
 " config_mysql_db_name
 echo "
 --> $config_mysql_db_name
@@ -111,7 +111,7 @@ echo " (testdb name)
 
 ######################################### config_lara_multitree | start
 read -p "
-multi page tree? (bsp.: /de/seiten || /en/sites): 
+multi page tree? (bsp.: /de/seiten || /en/sites):
 " config_lara_multitree
 echo "
 --> $config_lara_multitree
@@ -123,7 +123,7 @@ echo "
 
 ######################################### config_email_from_name | start
 read -p "
-email (sender name): 
+email (sender name):
 " config_email_from_name
 echo "
 --> $config_email_from_name
@@ -132,7 +132,7 @@ echo "
 
 ######################################### config_email_from_email | start
 read -p "
-email (sender email): 
+email (sender email):
 " config_email_from_email
 echo "
 --> $config_email_from_email
@@ -141,7 +141,7 @@ echo "
 
 ######################################### config_email_driver | start
 read -p "
-email (mail driver: smtp | sendmail): 
+email (mail driver: smtp | sendmail):
 " config_email_driver
 echo "
 --> $config_email_driver
@@ -151,7 +151,7 @@ echo "
 
 ######################################### config_email_host | start
 read -p "
-email (host): 
+email (host):
 " config_email_host
 echo "
 --> $config_email_host
@@ -160,7 +160,7 @@ echo "
 
 ######################################### config_email_port | start
 read -p "
-email (port): 
+email (port):
 " config_email_port
 echo "
 --> $config_email_port
@@ -170,7 +170,7 @@ echo "
 
 ######################################### config_email_password | start
 read -p "
-email (password): 
+email (password):
 " config_email_password
 echo "
 --> $config_email_password
@@ -179,7 +179,7 @@ echo "
 
 ######################################### config_email_encryption | start
 read -p "
-email (encryption): 
+email (encryption):
 " config_email_encryption
 echo "
 --> $config_email_encryption
@@ -206,7 +206,7 @@ folder=$PWD/$name
 if [ -d $folder/ ];
 then
 echo "
-folder exist!!! abort! 
+folder exist!!! abort!
 "
 exit 1
 fi
@@ -219,8 +219,8 @@ fi
 #######################################
 mkdir $folder/
 
-#install laravel as packagephp 
-composer create-project --prefer-dist laravel/laravel $name 
+#install laravel as packagephp
+composer create-project --prefer-dist laravel/laravel:^7.0 $name
 
 
 echo "
@@ -239,7 +239,7 @@ APP_API_PREFIX=$config_lara_api_prefix
 APP_FRONTEND_PREFIX=$config_lara_frontend_prefix
 
 
-DB_CONNECTION=mysql
+DB_CONNECTION=lara_mysql
 DB_HOST=$config_mysql_host
 DB_PORT=3306
 DB_DATABASE=$config_mysql_db_name
@@ -248,7 +248,7 @@ DB_PASSWORD=$config_mysql_password
 DB_STRICT=false
 
 ### test installation
-DB_TEST_CONNECTION=test
+DB_TEST_CONNECTION=lara_test
 DB_TEST_HOST=$config_mysql_host
 DB_TEST_PORT=3306
 DB_TEST_DATABASE=$config_mysql_db_name_test
@@ -304,8 +304,8 @@ PUSHER_APP_SECRET=
 PUSHER_APP_CLUSTER=mt1
 
 MIX_PUSHER_APP_KEY="${PUSHER_APP_KEY}"
-MIX_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"  
-" > $folder/.env && 
+MIX_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"
+" > $folder/.env &&
 
 
 ## create/overwrite default phpunit.xml
@@ -337,7 +337,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>
         <server name="APP_ENV" value="testing"/>
         <server name="BCRYPT_ROUNDS" value="4"/>
         <server name="CACHE_DRIVER" value="array"/>
-        <server name="DB_CONNECTION" value="test"/>
+        <server name="DB_CONNECTION" value="lara_test"/>
         <server name="DB_DATABASE" value="test"/>
         <server name="MAIL_MAILER" value="array"/>
         <server name="QUEUE_CONNECTION" value="sync"/>
@@ -346,22 +346,22 @@ echo '<?xml version="1.0" encoding="UTF-8"?>
     </php>
 </phpunit>
 
-' > $folder/phpunit.xml && 
+' > $folder/phpunit.xml &&
 
 
 #change dir to folder
 cd $folder &&
 
 #you need one valid github token
-echo 'how to get a valid github token: 
+echo 'how to get a valid github token:
 https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token';
 
 #run engine
-composer config repositories.github-haml-eu vcs https://github.com/github-haml-eu/lara.git && 
-composer require github-haml-eu/lara:dev-master && 
+composer config repositories.github-haml-eu vcs https://github.com/github-haml-eu/lara.git &&
+composer require github-haml-eu/lara:dev-master &&
 
 #remove default usertablecreate migration from laravel
-rm $folder/database/migrations/2014_10_12_000000_create_users_table.php && 
+rm $folder/database/migrations/2014_10_12_000000_create_users_table.php &&
 
 
 ##install lara
@@ -375,14 +375,19 @@ php artisan vendor:publish --tag engine.public.js
 php artisan vendor:publish --tag engine.public.plugins
 php artisan vendor:publish --tag engine.public.vendor
 
-//overwrite app
+##overwrite app
 php artisan vendor:publish --tag engine.app.config  --force
 php artisan vendor:publish --tag engine.database.config  --force
 php artisan vendor:publish --tag engine.engine.config  --force
 
-//add git ignore logi for backup folders etc..
+##add git ignore logic for backup folders etc..
 echo '/storage/backup/*' >> $folder/.gitignore
 echo '/storage/lara/*' >> $folder/.gitignore
+
+
+##testing after installation
+php artisan lara:test run_with_new_db 1
+
 
 #output
 echo '
