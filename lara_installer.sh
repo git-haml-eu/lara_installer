@@ -25,9 +25,7 @@ echo "
 
 
 ######################################### config_lara_admin_prefix | start
-read -p "
-admin prefix:
-" config_lara_admin_prefix
+read -e -p "admin prefix: " -i "admin" config_lara_admin_prefix
 echo "
 --> $config_lara_admin_prefix
 "
@@ -57,28 +55,21 @@ echo "
 
 
 ######################################### url | start
-read -p "
-Wie lautet die Url:
-(bsp.: https://engine.haml)
-" config_url
+read -e -p "Wie lautet die Url? " -i "https://$name.haml" config_url
 echo "
 --> $config_url
 "
 ######################################### url | end
 
 ######################################### config_mysql_host | start
-read -p "
-Mysqldaten (Host):
-" config_mysql_host
+read -e -p "Mysqldaten (Host): " -i "localhost" config_mysql_host
 echo "
 --> $config_mysql_host
 "
 ######################################### config_mysql_host | end
 
 ######################################### config_mysql_user | start
-read -p "
-Mysqldaten (User):
-" config_mysql_user
+read -e -p "Mysqldaten (User): " -i "root" config_mysql_user
 echo "
 --> $config_mysql_user
 "
@@ -96,9 +87,7 @@ echo "
 
 
 ######################################### config_mysql_dn_name | start
-read -p "
-Mysqldaten (DB):
-" config_mysql_db_name
+read -e -p "Mysqldaten (DB): " -i "$name" config_mysql_db_name
 echo "
 --> $config_mysql_db_name
 "
@@ -110,15 +99,11 @@ echo " (testdb name)
 
 
 ######################################### config_lara_multitree | start
-read -p "
-multi page tree? (bsp.: /de/seiten || /en/sites):
-" config_lara_multitree
+read -e -p "multi page tree? (bsp.: /de/seiten || /en/sites): " -i "1" config_lara_multitree
 echo "
 --> $config_lara_multitree
 "
 ######################################### config_lara_multitree | end
-
-
 
 
 ######################################### config_email_from_name | start
@@ -222,6 +207,9 @@ mkdir $folder/
 #install laravel as packagephp
 composer create-project --prefer-dist laravel/laravel:^7.0 $name
 
+echo "
+--------------------------------> create env
+"
 
 echo "
 APP_ENV=local
@@ -239,7 +227,7 @@ APP_API_PREFIX=$config_lara_api_prefix
 APP_FRONTEND_PREFIX=$config_lara_frontend_prefix
 
 
-DB_CONNECTION=lara_mysql
+DB_CONNECTION=mysql
 DB_HOST=$config_mysql_host
 DB_PORT=3306
 DB_DATABASE=$config_mysql_db_name
@@ -364,6 +352,20 @@ composer require github-haml-eu/lara:dev-master &&
 rm $folder/database/migrations/2014_10_12_000000_create_users_table.php &&
 
 
+##overwrite configs
+php artisan vendor:publish --tag engine.app.config  --force
+php artisan vendor:publish --tag engine.database.config  --force
+php artisan vendor:publish --tag engine.engine.config  --force
+
+echo "
+--------------------------------> clear cache
+"
+#clear cache
+php artisan config:cache
+
+echo "
+--------------------------------> install
+"
 ##install lara
 php artisan lara:install installfull_with_composer_change
 
@@ -375,10 +377,6 @@ php artisan vendor:publish --tag engine.public.js
 php artisan vendor:publish --tag engine.public.plugins
 php artisan vendor:publish --tag engine.public.vendor
 
-##overwrite app
-php artisan vendor:publish --tag engine.app.config  --force
-php artisan vendor:publish --tag engine.database.config  --force
-php artisan vendor:publish --tag engine.engine.config  --force
 
 ##add git ignore logic for backup folders etc..
 echo '/storage/backup/*' >> $folder/.gitignore
