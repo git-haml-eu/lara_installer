@@ -353,6 +353,7 @@ rm $folder/database/migrations/2014_10_12_000000_create_users_table.php &&
 
 
 ##overwrite configs
+php artisan vendor:publish --tag engine.auth.config  --force
 php artisan vendor:publish --tag engine.app.config  --force
 php artisan vendor:publish --tag engine.database.config  --force
 php artisan vendor:publish --tag engine.engine.config  --force
@@ -370,12 +371,12 @@ echo "
 php artisan lara:install installfull_with_composer_change
 
 ##publish vendor (backend files)
-php artisan vendor:publish --tag engine.public.css
-php artisan vendor:publish --tag engine.public.frontend
-php artisan vendor:publish --tag engine.public.img
-php artisan vendor:publish --tag engine.public.js
-php artisan vendor:publish --tag engine.public.plugins
-php artisan vendor:publish --tag engine.public.vendor
+php artisan vendor:publish --tag engine.public.css --force
+php artisan vendor:publish --tag engine.public.frontend --force
+php artisan vendor:publish --tag engine.public.img --force
+php artisan vendor:publish --tag engine.public.js --force
+php artisan vendor:publish --tag engine.public.plugins --force
+php artisan vendor:publish --tag engine.public.vendor --force
 
 
 ##add git ignore logic for backup folders etc..
