@@ -4,7 +4,7 @@
 #set php version -> if server has many differnt php versions, often default php version is php5.3 but we need at least 7.0
 var_php=php
 #set composer path, if not installed global, we need the current composerversion (download @ composer)
-var_composer='./lara_composer'
+var_composer='/mnt/1CBD8C4A055CCE33/server/lara_server/composer'
 
 
 #######################################
@@ -209,7 +209,7 @@ fi
 mkdir $folder/
 
 #install laravel as packagephp
-$var_composer create-project --prefer-dist laravel/laravel:^7.0 $name
+$var_composer create-project --prefer-dist laravel/laravel:^7.0 $folder
 
 echo "
 --------------------------------> create env
