@@ -7,3 +7,9 @@ how to run:
 ```bash
 $ ./lara_install.sh
 ```
+or
+
+```bash
+$ bash lara_install.sh
+```
+

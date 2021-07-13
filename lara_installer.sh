@@ -1,12 +1,17 @@
 #!/bin/bash
 #
+####################################### set server php version | composer path
+#set php version -> if server has many differnt php versions, often default php version is php5.3 but we need at least 7.0
+var_php=php
+#set composer path, if not installed global, we need the current composerversion (download @ composer)
+var_composer='./lara_composer'
+
 
 #######################################
 #
 # get name
 #
 #######################################
-
 read -p "
 Welches Projekt soll generiert werden?
 " name
@@ -178,9 +183,8 @@ echo "
 # set variables
 #
 #######################################
-
-folder=$PWD/$name
-
+folder=$(dirname -- "$PWD")
+folder=$folder/$name
 #######################################
 #
 # check for duplicates
@@ -205,7 +209,7 @@ fi
 mkdir $folder/
 
 #install laravel as packagephp
-composer create-project --prefer-dist laravel/laravel:^7.0 $name
+$var_composer create-project --prefer-dist laravel/laravel:^7.0 $name
 
 echo "
 --------------------------------> create env
@@ -345,38 +349,38 @@ echo 'how to get a valid github token:
 https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token';
 
 #run engine
-composer config repositories.github-haml-eu/lara vcs https://github.com/github-haml-eu/lara.git &&
-composer require github-haml-eu/lara:dev-master &&
+$var_composer config repositories.github-haml-eu/lara vcs https://github.com/github-haml-eu/lara.git &&
+$var_composer require github-haml-eu/lara:dev-master &&
 
 #remove default usertablecreate migration from laravel
 rm $folder/database/migrations/2014_10_12_000000_create_users_table.php &&
 
 
 ##overwrite configs
-php artisan vendor:publish --tag engine.auth.config  --force
-php artisan vendor:publish --tag engine.app.config  --force
-php artisan vendor:publish --tag engine.database.config  --force
-php artisan vendor:publish --tag engine.engine.config  --force
+$var_php artisan vendor:publish --tag engine.auth.config  --force
+$var_php artisan vendor:publish --tag engine.app.config  --force
+$var_php artisan vendor:publish --tag engine.database.config  --force
+$var_php artisan vendor:publish --tag engine.engine.config  --force
 
 echo "
 --------------------------------> clear cache
 "
 #clear cache
-php artisan config:cache
+$var_php artisan config:cache
 
 echo "
 --------------------------------> install
 "
 ##install lara
-php artisan lara:install installfull_with_composer_change
+$var_php artisan lara:install installfull_with_./lara_composer_change
 
 ##publish vendor (backend files)
-php artisan vendor:publish --tag engine.public.css --force
-php artisan vendor:publish --tag engine.public.frontend --force
-php artisan vendor:publish --tag engine.public.img --force
-php artisan vendor:publish --tag engine.public.js --force
-php artisan vendor:publish --tag engine.public.plugins --force
-php artisan vendor:publish --tag engine.public.vendor --force
+$var_php artisan vendor:publish --tag engine.public.css --force
+$var_php artisan vendor:publish --tag engine.public.frontend --force
+$var_php artisan vendor:publish --tag engine.public.img --force
+$var_php artisan vendor:publish --tag engine.public.js --force
+$var_php artisan vendor:publish --tag engine.public.plugins --force
+$var_php artisan vendor:publish --tag engine.public.vendor --force
 
 
 ##add git ignore logic for backup folders etc..
@@ -385,7 +389,7 @@ echo '/storage/lara/*' >> $folder/.gitignore
 
 
 ##testing after installation
-php artisan lara:test run_with_new_db 1
+$var_php artisan lara:test run_with_new_db 1
 
 
 #output
