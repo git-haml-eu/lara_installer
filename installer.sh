@@ -280,6 +280,8 @@ FACEBOOK_KEY=
 GOOGLE_MAPS_KEY=
 GOOGLE_PLACE_KEY=
 
+COMPOSER_PATH='$var_composer'
+
 #########################################
 
 APP_KEY=base64:B2UPTHFjbJtPEPOG7jgnNZpZf+mB94YuPtBEI3kyz1s=
