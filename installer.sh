@@ -19,6 +19,33 @@ echo "
 --> $name
 "
 
+
+folder=$(dirname -- "$PWD")
+folder=$folder/$name
+
+#######################################
+#
+# check if folder exist, if question is true, then delete folder, else abort
+#
+#######################################
+if [ -d $folder/ ];
+then
+    read -p "
+ATTENTION: Folder exist! Should i delete it? (N|y)
+" remove_folder
+
+    if [[ ( $remove_folder == "y" ) || ( $remove_folder == "Y" ) || ( $remove_folder == 1 ) ]]
+    then
+        rm -rf $folder
+        echo $folder" deleted"
+    else
+        echo "ABORT!!!"
+        exit 1
+    fi
+fi
+
+
+
 ######################################### config_lara_app_prefix | start
 read -p "
 app prefix:
@@ -183,22 +210,7 @@ echo "
 # set variables
 #
 #######################################
-folder=$(dirname -- "$PWD")
-folder=$folder/$name
-#######################################
-#
-# check for duplicates
-#
-#######################################
 
-
-if [ -d $folder/ ];
-then
-echo "
-folder exist!!! abort!
-"
-exit 1
-fi
 
 
 #######################################
@@ -209,7 +221,7 @@ fi
 mkdir $folder/
 
 #install laravel as packagephp
-$var_composer create-project --prefer-dist laravel/laravel:^7.0 $folder
+$var_composer create-project --prefer-dist laravel/laravel:7.29 $folder
 
 echo "
 --------------------------------> create env
@@ -348,9 +360,9 @@ cd $folder &&
 echo 'how to get a valid github token:
 https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token';
 
-#run engine
+#run engine composer install --ignore-platform-reqs
 $var_composer config repositories.github-haml-eu/lara vcs https://github.com/github-haml-eu/lara.git &&
-$var_composer require github-haml-eu/lara:dev-master &&
+$var_composer require github-haml-eu/lara:dev-master&&
 
 #remove default usertablecreate migration from laravel
 rm $folder/database/migrations/2014_10_12_000000_create_users_table.php &&
