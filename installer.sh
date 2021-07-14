@@ -386,7 +386,7 @@ echo "
 --------------------------------> install
 "
 ##install lara
-$var_php artisan lara:install installfull_with_./lara_composer_change
+$var_php artisan lara:install installfull_with_composer_change
 
 ##publish vendor (backend files)
 $var_php artisan vendor:publish --tag engine.public.css --force
