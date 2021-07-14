@@ -221,7 +221,7 @@ echo "
 mkdir $folder/
 
 #install laravel as packagephp
-$var_composer create-project --prefer-dist laravel/laravel:7.29 $folder
+$var_php $var_composer create-project --prefer-dist laravel/laravel:7.29 $folder
 
 echo "
 --------------------------------> create env
@@ -361,8 +361,8 @@ echo 'how to get a valid github token:
 https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token';
 
 #run engine composer install --ignore-platform-reqs
-$var_composer config repositories.github-haml-eu/lara vcs https://github.com/github-haml-eu/lara.git &&
-$var_composer require github-haml-eu/lara:dev-master&&
+$var_php $var_composer config repositories.github-haml-eu/lara vcs https://github.com/github-haml-eu/lara.git &&
+$var_php $var_composer require github-haml-eu/lara:dev-master&&
 
 #remove default usertablecreate migration from laravel
 rm $folder/database/migrations/2014_10_12_000000_create_users_table.php &&
