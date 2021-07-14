@@ -1,18 +1,50 @@
 #!/bin/bash
 #
+####################################### set server php version | composer path
+#set php version -> if server has many differnt php versions, often default php version is php5.3 but we need at least 7.0
+var_php=php
+#set composer path, if not installed global, we need the current composerversion (download @ composer)
+var_composer='/mnt/1CBD8C4A055CCE33/server/lara_server/composer'
+
 
 #######################################
 #
 # get name
 #
 #######################################
-
 read -p "
 Welches Projekt soll generiert werden?
 " name
 echo "
 --> $name
 "
+
+
+folder=$(dirname -- "$PWD")
+folder=$folder/$name
+
+#######################################
+#
+# check if folder exist, if question is true, then delete folder, else abort
+#
+#######################################
+if [ -d $folder/ ];
+then
+    read -p "
+ATTENTION: Folder exist! Should i delete it? (N|y)
+" remove_folder
+
+    if [[ ( $remove_folder == "y" ) || ( $remove_folder == "Y" ) || ( $remove_folder == 1 ) ]]
+    then
+        rm -rf $folder
+        echo $folder" deleted"
+    else
+        echo "ABORT!!!"
+        exit 1
+    fi
+fi
+
+
 
 ######################################### config_lara_app_prefix | start
 read -p "
@@ -179,22 +211,6 @@ echo "
 #
 #######################################
 
-folder=$PWD/$name
-
-#######################################
-#
-# check for duplicates
-#
-#######################################
-
-
-if [ -d $folder/ ];
-then
-echo "
-folder exist!!! abort!
-"
-exit 1
-fi
 
 
 #######################################
@@ -205,7 +221,7 @@ fi
 mkdir $folder/
 
 #install laravel as packagephp
-composer create-project --prefer-dist laravel/laravel:^7.0 $name
+$var_composer create-project --prefer-dist laravel/laravel:7.29 $folder
 
 echo "
 --------------------------------> create env
@@ -344,38 +360,39 @@ cd $folder &&
 echo 'how to get a valid github token:
 https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token';
 
-#run engine
-composer config repositories.github-haml-eu/lara vcs https://github.com/github-haml-eu/lara.git &&
-composer require github-haml-eu/lara:dev-master &&
+#run engine composer install --ignore-platform-reqs
+$var_composer config repositories.github-haml-eu/lara vcs https://github.com/github-haml-eu/lara.git &&
+$var_composer require github-haml-eu/lara:dev-master&&
 
 #remove default usertablecreate migration from laravel
 rm $folder/database/migrations/2014_10_12_000000_create_users_table.php &&
 
 
 ##overwrite configs
-php artisan vendor:publish --tag engine.app.config  --force
-php artisan vendor:publish --tag engine.database.config  --force
-php artisan vendor:publish --tag engine.engine.config  --force
+$var_php artisan vendor:publish --tag engine.auth.config  --force
+$var_php artisan vendor:publish --tag engine.app.config  --force
+$var_php artisan vendor:publish --tag engine.database.config  --force
+$var_php artisan vendor:publish --tag engine.engine.config  --force
 
 echo "
 --------------------------------> clear cache
 "
 #clear cache
-php artisan config:cache
+$var_php artisan config:cache
 
 echo "
 --------------------------------> install
 "
 ##install lara
-php artisan lara:install installfull_with_composer_change
+$var_php artisan lara:install installfull_with_./lara_composer_change
 
 ##publish vendor (backend files)
-php artisan vendor:publish --tag engine.public.css
-php artisan vendor:publish --tag engine.public.frontend
-php artisan vendor:publish --tag engine.public.img
-php artisan vendor:publish --tag engine.public.js
-php artisan vendor:publish --tag engine.public.plugins
-php artisan vendor:publish --tag engine.public.vendor
+$var_php artisan vendor:publish --tag engine.public.css --force
+$var_php artisan vendor:publish --tag engine.public.frontend --force
+$var_php artisan vendor:publish --tag engine.public.img --force
+$var_php artisan vendor:publish --tag engine.public.js --force
+$var_php artisan vendor:publish --tag engine.public.plugins --force
+$var_php artisan vendor:publish --tag engine.public.vendor --force
 
 
 ##add git ignore logic for backup folders etc..
@@ -384,7 +401,7 @@ echo '/storage/lara/*' >> $folder/.gitignore
 
 
 ##testing after installation
-php artisan lara:test run_with_new_db 1
+$var_php artisan lara:test run_with_new_db 1
 
 
 #output
