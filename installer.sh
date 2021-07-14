@@ -280,7 +280,7 @@ FACEBOOK_KEY=
 GOOGLE_MAPS_KEY=
 GOOGLE_PLACE_KEY=
 
-COMPOSER_PATH='$var_composer'
+COMPOSER_PATH='$var_php $var_composer'
 
 #########################################
 
