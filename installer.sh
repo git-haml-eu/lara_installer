@@ -1,11 +1,27 @@
 #!/bin/bash
 #
 ####################################### set server php version | composer path
-#set php version -> if server has many differnt php versions, often default php version is php5.3 but we need at least 7.0
-var_php=php
-#set composer path, if not installed global, we need the current composerversion (download @ composer)
-var_composer='/mnt/1CBD8C4A055CCE33/server/lara_server/composer'
 
+#get variables from "settings.conf" if available- else take laravel / laima config default
+######################### template for settings.conf | start
+#
+#
+# #set php version -> if server has many differnt php versions, often default php version is php5.3 but we need at least 7.0
+# var_php=php
+# #set composer path, if not installed global, we need the current composerversion (download @ composer)
+# var_composer='/mnt/1CBD8C4A055CCE33/server/lara_server/composer'
+#
+#
+######################### template for settings.conf | end
+FILE=settings.conf
+if test -f "$FILE"; then
+    source $FILE
+else
+    #set php version -> if server has many differnt php versions, often default php version is php5.3 but we need at least 7.0
+    var_php=php
+    #set composer path, if not installed global, we need the current composerversion (download @ composer)
+    var_composer='/mnt/1CBD8C4A055CCE33/server/lara_server/composer'
+fi
 
 #######################################
 #
