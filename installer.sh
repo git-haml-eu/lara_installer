@@ -242,6 +242,7 @@ APP_ADMIN_PREFIX=$config_lara_admin_prefix
 APP_API_PREFIX=$config_lara_api_prefix
 APP_FRONTEND_PREFIX=$config_lara_frontend_prefix
 
+PHP_VERSION=$var_php
 
 DB_CONNECTION=mysql
 DB_HOST=$config_mysql_host
