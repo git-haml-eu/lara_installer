@@ -11,7 +11,9 @@ $file_handle = fopen("settings.conf", "rb");
 while (!feof($file_handle) ) {
     $line_of_text = fgets($file_handle);
     $data = explode('=', $line_of_text);
-    $parts[$data[0]] = $data[1];
+    if(array_key_exists(1,$data)){
+        $parts[$data[0]] = $data[1];
+    }
 }
 
 fclose($file_handle);
