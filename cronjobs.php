@@ -6,7 +6,7 @@
 # how to: make 60 cronjobs that trigger this script. this script will manage all cronjobs
 #
 #################################
-$file_handle = fopen("settings.conf", "rb");
+$file_handle = fopen(dirname(__FILE__)."/settings.conf", "rb");
 
 while (!feof($file_handle) ) {
     $line_of_text = fgets($file_handle);
@@ -26,6 +26,6 @@ $cronjobs = explode(',',trim($parts['cronjobs']));
 
 //run different cronjobs
 foreach($cronjobs as $cronjobpath){
-    $run[$cronjobpath] = system($php." ".$cronjobpath."/artisan lara:run");
+    $run[$cronjobpath] = system($php." ".$cronjobpath."/artisan schedule:run");
 }
 ?>
